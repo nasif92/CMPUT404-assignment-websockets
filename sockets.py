@@ -76,9 +76,16 @@ class Client:
 
 myWorld = World()
 
+client_list = list()
+
 
 def set_listener(entity, data):
     ''' do something with the update ! '''
+    content = {}
+    content[entity] = data
+
+    for client in client_list:
+        client.put(json.dumps(content))
 
 
 myWorld.add_set_listener(set_listener)
@@ -87,7 +94,7 @@ myWorld.add_set_listener(set_listener)
 @app.route('/')
 def hello():
     '''Return something coherent here.. perhaps redirect to /static/index.html '''
-    return None
+    return flask.redirect('static/index.html')
 
 
 def read_ws(ws, client):
