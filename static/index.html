@@ -51,7 +51,6 @@ function drawCircle(context,entity) {
         lineWidth = 3;
         var x = entity["x"];
         var y = entity["y"];
-        //moveTo(x,y);
         fillStyle = entity["colour"];
         strokeStyle = fillStyle;
         arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);  
@@ -95,11 +94,13 @@ function clearFrame() {
 function renderFrame() {
     clearFrame();
     for (var key in world) {
+        var entity = world[key];
+        var type = entity["type"];
         if (type == "hat") {
             drawHat(context, prepEntity(entity));
         } else {
             drawCircle(context, prepEntity(entity));
-        }    
+        }
     }
 }
 
@@ -280,11 +281,12 @@ function wsSetup() {
             debug("WebSocket Recv:" + msg.data);
             //XXX: TODO What are you going to do here?      
             var data = JSON.parse(msg.data);
-            for (var entity in data){
+            for (let entity in data){
                 world[entity] = data[entity]
             }
             
             drawNextFrame();
+            drawFrame();
         } catch (e) {
             alert("socket on message: " + e);
         }
